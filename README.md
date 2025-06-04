@@ -106,8 +106,7 @@ total_interest = schedule['Interest'].sum()
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/salary-loan-calculator.git
-cd salary-loan-calculator
+https://github.com/Karagwa/Salary-and-Loan-Calculator
 
 # Build and run containers
 docker compose up --build
