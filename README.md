@@ -106,8 +106,8 @@ total_interest = schedule['Interest'].sum()
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/Karagwa/Salary-and-Loan-Calculator
-
+git clone https://github.com/yourusername/salary-loan-calculator.git
+cd salary-loan-calculator
 
 # Build and run containers
 docker compose up --build
@@ -116,7 +116,6 @@ docker compose up --build
 # Frontend: http://localhost:8501
 # Backend Docs: http://localhost:8000/docs
 ```
-
 
 
 ## 🔍 Key Assumptions
@@ -137,12 +136,12 @@ docker compose up --build
 ## 🌍 Live Deployment
 
 Access the production deployment at:  
-
+https://salary-and-loan-calculator-lwqlvezyrnvkfmxhmdeedb.streamlit.app/
 
 ## 📜 License
 MIT License - See [LICENSE](LICENSE) for details
 
 ---
 
-
+💡 **Pro Tip**: Use the API docs at `/docs` to test endpoints directly!
 ```
