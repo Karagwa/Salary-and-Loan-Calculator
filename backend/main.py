@@ -40,3 +40,6 @@ async def process_loan(request: LoanRequest):
         request.term
     )
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
