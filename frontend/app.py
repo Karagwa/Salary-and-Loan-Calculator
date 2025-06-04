@@ -92,9 +92,4 @@ with tab2:
         except requests.exceptions.RequestException:
             st.error("Backend service unavailable. Please try again later.")
 
-st.sidebar.markdown("### System Status")
-try:
-    health = requests.get(f"{BACKEND_URL}/health").json()
-    st.sidebar.success("Backend: Healthy")
-except:
-    st.sidebar.error("Backend: Unavailable")
+
