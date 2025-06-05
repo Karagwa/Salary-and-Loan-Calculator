@@ -3,8 +3,8 @@ import requests
 import pandas as pd
 from datetime import datetime
 
-# Configure backend URL (will be overridden by Docker Compose)
-BACKEND_URL = "http://backend:8000"
+
+BACKEND_URL = "https://salary-and-loan-calculator-lwqlvezyrnvkfmxhmdeedb.streamlit.app/"
 
 st.title("💰 Advanced Salary & Loan Calculator")
 

@@ -9,7 +9,7 @@ app = FastAPI()
 # CORS configuration to allow frontend communication
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins for development; restrict in production
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -43,3 +43,7 @@ async def process_loan(request: LoanRequest):
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+@app.get("/")
+def read_root():
+    return {"msg": "Backend is alive!"}
