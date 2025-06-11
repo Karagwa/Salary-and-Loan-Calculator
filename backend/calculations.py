@@ -1,31 +1,43 @@
 import pandas as pd
 from datetime import datetime
+from fastapi import APIRouter
+from pydantic import BaseModel
+from models import AdvanceRequest, LoanRequest
 
-def calculate_advance(gross_salary, pay_frequency, requested_advance):
+router= APIRouter()
+
+
+
+@router.post("/calculate_advance", response_class=dict)
+def calculate_advance(data: AdvanceRequest):
     
-    if pay_frequency == 'weekly':
-        monthly_salary = gross_salary * 4.33
-    elif pay_frequency == 'bi-weekly':
-        monthly_salary = gross_salary * 2.166
+    if data.pay_frequency == 'weekly':
+        monthly_salary = data.gross_salary * 4.33
+    elif data.pay_frequency == 'bi-weekly':
+        monthly_salary = data.gross_salary * 2.166
     else:
-        monthly_salary = gross_salary
+        monthly_salary = data.gross_salary
     
     # Eligibility rules
     max_advance = monthly_salary * 0.3  # Max 30% of monthly salary
-    is_eligible = requested_advance <= max_advance
+    is_eligible = data.requested_advance <= max_advance
     
     
-    fee = requested_advance * 0.05 if is_eligible else 0
+    fee = data.requested_advance * 0.05 if is_eligible else 0
     
     return {
         "eligible": is_eligible,
-        "requested_amount": requested_advance,
+        "requested_amount": data.requested_advance,
         "max_available": max_advance,
         "fee": round(fee, 2),
-        "total_repayment": round(requested_advance + fee, 2) if is_eligible else 0
+        "total_repayment": round(data.requested_advance + fee, 2) if is_eligible else 0
     }
 
-def calculate_loan(amount, interest_rate, term):
+@router.post("/calculate_loan", response_class=dict)
+def calculate_loan(data: LoanRequest):
+    amount = data.amount
+    interest_rate = data.interest_rate
+    term = data.term  # in months
     
     monthly_rate = interest_rate / 100 / 12
     payment = (monthly_rate * amount) / (1 - (1 + monthly_rate) ** -term)

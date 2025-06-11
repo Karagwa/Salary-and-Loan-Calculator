@@ -1,12 +1,11 @@
-version: '3.8'
+
 
 services:
   backend:
-    build: ./backend
-    ports:
-      - "8000:8000"
+    build: ./backend        # Don't include the port here, it will be set in the Dockerfile. This prevents the backend from being accessible from outside the container.
+        
     environment:
-      - PYTHONUNBUFFERED=1
+      - PYTHONUNBUFFERED=1  # Ensures that Python output is sent straight to the terminal without buffering
     networks:
       - finnet
     restart: unless-stopped
