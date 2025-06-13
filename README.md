@@ -138,14 +138,10 @@ docker compose up --build
 - No additional fees or penalties
 
 ## 🌍 Live Deployment
-This app was deployed on Google cloud
-Access the production deployment at:  
+- This app was deployed on Google cloud
+- Access the production deployment at:  
+
 https://streamlit-frontend-service-77068367626.us-central1.run.app/
 
 ## 📜 License
 MIT License - See [LICENSE](LICENSE) for details
-
----
-
-💡 **Pro Tip**: Use the API docs at `/docs` to test endpoints directly!
-```
