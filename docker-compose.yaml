@@ -2,25 +2,32 @@
 
 services:
   backend:
-    build: ./backend        # Don't include the port here, it will be set in the Dockerfile. This prevents the backend from being accessible from outside the container.
-        
+    build: ./backend
     environment:
-      - PYTHONUNBUFFERED=1  # Ensures that Python output is sent straight to the terminal without buffering
+      - PYTHONUNBUFFERED=1
     networks:
       - finnet
     restart: unless-stopped
 
   frontend:
     build: ./frontend
-    ports:
-      - "8501:8501"
     environment:
-      - BACKEND_URL=http://backend:8000
-    depends_on:
-      - backend
+      - BACKEND_URL=http://backend:8000  # Needed if frontend calls backend directly (e.g., via API)
     networks:
       - finnet
     restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"  # Public port (single URL)
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf  # Reverse proxy config
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - finnet
 
 networks:
   finnet:

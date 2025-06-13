@@ -8,7 +8,7 @@ router= APIRouter()
 
 
 
-@router.post("/calculate_advance", response_class=dict)
+@router.post("/calculate_advance")
 def calculate_advance(data: AdvanceRequest):
     
     if data.pay_frequency == 'weekly':
@@ -33,7 +33,7 @@ def calculate_advance(data: AdvanceRequest):
         "total_repayment": round(data.requested_advance + fee, 2) if is_eligible else 0
     }
 
-@router.post("/calculate_loan", response_class=dict)
+@router.post("/calculate_loan")
 def calculate_loan(data: LoanRequest):
     amount = data.amount
     interest_rate = data.interest_rate

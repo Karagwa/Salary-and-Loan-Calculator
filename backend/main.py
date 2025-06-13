@@ -7,16 +7,22 @@ import pandas as pd
 
 app = FastAPI()
 
-# CORS configuration to allow frontend communication
+origins = [
+    "https://streamlit-frontend-service-77068367626.us-central1.run.app", # <--- REPLACE THIS with your actual Streamlit URL
+    "http://localhost:8501",  # Allow requests from your local Streamlit development server
+    "http://localhost:8000",  # Allow requests from your local FastAPI development server (if needed)
+    # You can add more origins here if your frontend might be deployed elsewhere (e.g., a custom domain later)
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development; restrict in production
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,          # List of origins that are allowed to make requests
+    allow_credentials=True,         # Allow cookies to be included in cross-origin requests
+    allow_methods=["*"],            # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],            # Allow all headers in cross-origin requests
 )
-#routers
 
-app.include_router(calculations_router, prefix="/api", tags=["calculations"])
+app.include_router(calculations_router, tags=["calculations"])
 
 
 

@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 # Configure backend URL (will be overridden by Docker Compose)
-BACKEND_URL = "http://backend:8000"
+BACKEND_URL = "https://fastapi-backend-service-77068367626.us-central1.run.app"
 
 st.title("💰 Advanced Salary & Loan Calculator")
 
@@ -20,7 +20,7 @@ with tab1:
     st.header("Salary Advance Calculator")
     st.markdown("""
                 This tool helps you determine if you are eligible for a salary advance and calculates the maximum available amount based on your gross salary and pay frequency.""")
-
+    
     col1, col2 = st.columns(2)
     with col1:
         gross_salary = st.number_input("Gross Salary",placeholder="Enter your gross salary", min_value=0.0, step=100.0)
@@ -31,10 +31,10 @@ with tab1:
             ["weekly", "bi-weekly", "monthly"]
         )
         st.caption("This is the frequency at which you receive your salary.")
-
+    
     requested_advance = st.number_input("Requested Advance Amount", placeholder="Enter the amount ", min_value=0.0, step=100.0)
     st.caption("This is the amount you wish to request as an advance on your salary.")
-
+    
     if st.button("Calculate Advance"):
         try:
             response = requests.post(
@@ -45,10 +45,10 @@ with tab1:
                     "requested_advance": requested_advance
                 }
             )
-
+            
             if response.status_code == 200:
                 result = response.json()
-
+                
                 if result['eligible']:
                     st.success("✅ You are eligible for this advance!")
                     st.write(f"Maximum available advance: ${result['max_available']:,.2f}")
@@ -59,14 +59,14 @@ with tab1:
                     st.write(f"Maximum available advance: ${result['max_available']:,.2f}")
             else:
                 st.error("Error calculating advance. Please try again.")
-
+                
         except requests.exceptions.RequestException:
             st.error("Backend service unavailable. Please try again later.")
 
 with tab2:
     st.header("Loan Calculator")
     st.subheader("Calculate your monthly payments and total repayment for a loan.")
-
+    
     col1, col2 = st.columns(2)
     with col1:
         loan_amount = st.number_input("Loan Amount", placeholder="Enter loan amount", min_value=0.0, step=1000.0)
@@ -80,7 +80,7 @@ with tab2:
                 The loan calculator will compute your monthly payment, total repayment amount, and total interest paid over the life of the loan.
                 It will also provide an amortization schedule for the first 12 months of the loan.
                 """)
-
+    
     if st.button("Calculate Loan"):
         try:
             response = requests.post(
@@ -91,54 +91,30 @@ with tab2:
                     "term": loan_term
                 }
             )
-
+            
             if response.status_code == 200:
                 result = response.json()
-
+                
                 st.success("Loan calculation complete!")
                 st.write(f"Monthly payment: ${result['monthly_payment']:,.2f}")
                 st.write(f"Total repayment: ${result['total_repayment']:,.2f}")
                 st.write(f"Total interest: ${result['total_interest']:,.2f}")
-
-                st.subheader(f"Amortization Schedule ({loan_term} Months Total)")
-
-                # Let user choose view style
-                view_option = st.radio("View as:",
-                                        ["First 12 Months", "Full Schedule (Scrollable)", "Custom Range"],
-                                        horizontal=True)
-
-                if view_option == "First 12 Months":
-                    st.dataframe(pd.DataFrame(result['amortization_schedule'][:12]))
-
-                elif view_option == "Full Schedule (Scrollable)":
-                    st.dataframe(
-                        pd.DataFrame(result['amortization_schedule']),
-                        height=400
-                    )
-
-                else:  # Custom Range
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        start = st.number_input("Start Month", 1, loan_term, 1)
-                    with col2:
-                        end = st.number_input("End Month", 1, loan_term, min(12, loan_term))
-
-                    if start > end:
-                        st.error("End month must be after start month")
-                    else:
-                        st.dataframe(
-                            pd.DataFrame(result['amortization_schedule'][start-1:end]),
-                            height=400
-                        )
+                
+                st.subheader(f"Amortization Schedule ({loan_term} Months)")
+                
+                schedule_df = pd.DataFrame(result['amortization_schedule'][:loan_term])
+                st.dataframe(schedule_df)
                 st.markdown("""
-                    The amortization schedule shows the breakdown of each payment into principal and interest, along with the remaining balance.
+                            The amortization schedule shows the breakdown of each payment into principal and interest, along with the remaining balance.
 
-                    """)
+                            """)
                 st.caption("What is an amortization schedule? It is a table that details each periodic payment on a loan, showing how much goes towards interest and how much goes towards the principal balance.")
-
+                
                 st.write("Generated on:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             else:
                 st.error("Error calculating loan. Please try again.")
-
+                
         except requests.exceptions.RequestException:
             st.error("Backend service unavailable. Please try again later.")
+
+
