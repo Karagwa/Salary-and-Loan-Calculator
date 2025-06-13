@@ -100,6 +100,11 @@ payment = (monthly_rate * amount) / (1 - (1 + monthly_rate) ** -term)
 ```python
 total_interest = schedule['Interest'].sum()
 ```
+4. **Loan Advance Eligibility Rules**
+```python
+  max_advance = monthly_salary * 0.3  # Max 30% of monthly salary
+  is_eligible = data.requested_advance <= max_advance
+```
 
 ## 🛠️ Setup & Deployment
 
@@ -133,9 +138,9 @@ docker compose up --build
 - No additional fees or penalties
 
 ## 🌍 Live Deployment
-
+This app was deployed on Google cloud
 Access the production deployment at:  
-https://salary-and-loan-calculator-lwqlvezyrnvkfmxhmdeedb.streamlit.app/
+https://streamlit-frontend-service-77068367626.us-central1.run.app/
 
 ## 📜 License
 MIT License - See [LICENSE](LICENSE) for details
